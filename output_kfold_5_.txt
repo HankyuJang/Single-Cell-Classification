@@ -1,0 +1,19 @@
+Preparing X and y from the input txt file...
+Preparing the trainsets and testsets using 5 fold...
+KFold(n_splits=10, random_state=None, shuffle=True)
+
+For each classification algorithm, the program will print a '.' for each run of train and test set
+SVM
+. . . . . Average accuracy for SVM classifier with linear kernel: 0.861
+
+Random Forest
+. . . . .
+Average accuracy for random forest classifier: 0.742
+
+k Nearest Neighbor
+. . . . .
+Average accuracy for kNN classifier: 0.684
+
+Neural Network
+. . . . .
+Average accuracy for neural network classifier: 0.538
