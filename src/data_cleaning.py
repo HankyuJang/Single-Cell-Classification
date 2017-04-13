@@ -45,6 +45,7 @@ if __name__ == '__main__':
     parser = ArgumentParser(description="gets txt file format input, then classify single cells into 9 types")
     parser.add_argument('-i', '--infile', type=argparse.FileType('r'), 
             help="txt file format (line 8: header, line 12 ~ line5009: data - col1: name - col2: label col3 ~ col: activation levels)", default=sys.stdin)
+    parser.add_argument('-o', '--outfile', help="output file name")
     parser.add_argument('-kfold', '--kfold', type=int, default=5, help="k-fold (positive integer. default is 5-fold)")
     args = parser.parse_args()
 
@@ -59,7 +60,7 @@ if __name__ == '__main__':
     print("Preparing the trainsets and testsets using {} fold...".format(k_fold))
     trainset, testset = prepare_train_test_using_kfold(k_fold, X, y)
 
-    np.savez("dataset", Train = trainset, Test = testset, Kfold = k_fold)
+    np.savez(args.outfile, Train = trainset, Test = testset, Kfold = k_fold)
     print("-"*60)
     print("trainset and testset are created!")
     print("They are saved as `dataset.npz` in the same directory")
