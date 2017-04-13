@@ -21,7 +21,7 @@ Since the codes are written in Python 3, if you run the code on the campus serve
 module load python/3.6.0
 ```
 
-The dataset is too large to push it into the Github. Please download the dataset [here]("https://drive.google.com/open?id=0B44YNR0bSKpQQ1kwR0pOZEZFM2M"), then make a directory data/ and save the expressionmRNAAnnotations.txt in the directory.
+The dataset is too large to push it into the Github. Please download the dataset [here](https://drive.google.com/open?id=0B44YNR0bSKpQQ1kwR0pOZEZFM2M), then make a directory data/ and save the expressionmRNAAnnotations.txt in the directory.
 
 ### Preprocessing
 
