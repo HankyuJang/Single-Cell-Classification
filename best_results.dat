@@ -1,0 +1,4 @@
+0.701,n=7,weights=distance,kNN
+0.823,criterion=gini,n=1024,minss=2,RandomForest
+0.862,kernel=poly,C=0.125,gamma=0.03125,degree=1,SVM
+0.895,hls=(64, 64, 64),alpha=0.5,activation=tanh,solver=lbfgs,NeuralNetwork
