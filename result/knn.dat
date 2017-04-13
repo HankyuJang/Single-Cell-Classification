@@ -1,0 +1,20 @@
+------------------------------------------------------------
+Loading the dataset...
+------------------------------------------------------------
+k nearest algorithm
+0.687,n=3,weights=uniform,kNN
+0.700,n=5,weights=uniform,kNN
+0.699,n=7,weights=uniform,kNN
+0.696,n=9,weights=uniform,kNN
+0.695,n=11,weights=uniform,kNN
+0.687,n=13,weights=uniform,kNN
+0.686,n=15,weights=uniform,kNN
+0.683,n=17,weights=uniform,kNN
+0.682,n=3,weights=distance,kNN
+0.700,n=5,weights=distance,kNN
+0.701,n=7,weights=distance,kNN
+0.697,n=9,weights=distance,kNN
+0.693,n=11,weights=distance,kNN
+0.689,n=13,weights=distance,kNN
+0.687,n=15,weights=distance,kNN
+0.686,n=17,weights=distance,kNN
