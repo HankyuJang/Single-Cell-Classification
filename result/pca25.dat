@@ -1,0 +1,8 @@
+0.871,kernel=linear,C=0.125,SVM
+0.853,kernel=poly,C=0.125,gamma=0.03125,degree=1,SVM
+0.835,n=7,weights=uniform,kNN
+0.835,n=7,weights=distance,kNN
+0.849,hls=(64, 64, 64),alpha=0.5,activation=tanh,solver=lbfgs,NeuralNetwork
+0.858,hls=(32, 64, 64),alpha=0.00048828125,activation=relu,solver=lbfgs,NeuralNetwork
+0.850,criterion=gini,n=1024,minss=2,RandomForest
+0.847,criterion=entropy,n=1024,minss=4,RandomForest
