@@ -29,7 +29,7 @@ The dataset is too large to push it into the Github. Please download the dataset
 
 - Input
     - expressionmRNAAnnotations.txt
-    - k (integer)
+    - kfold (integer)
 - Procedure
     - Cleans the data, then creates data matrix X and corresponding label vector y
     - Prepares k sets of trainset and testset using cross-validation
@@ -129,10 +129,12 @@ python src/main_nn.py -i data/dataset.npz -activation relu -solver adam
 
 Best parameter sets found for each classifier
 
-- knn: n=7, weights=distance, accuracy=0.701
+- knn: 
     - 0.701,n=7,weights=distance,kNN
     - 0.700,n=5,weights=uniform,kNN
-- rf: 0.823,criterion=gini,n=1024,minss=2,RandomForest
+- rf: 
+    - 0.823,criterion=gini,n=1024,minss=2,RandomForest
+    - 0.815,criterion=entropy,n=1024,minss=4,RandomForest
 - svm: linear kernel produced accuracy: 0.859 regardless of C. polynomial kernel performs slightly better with fine tuning.
     - 0.862,kernel=poly,C=0.125,gamma=0.03125,degree=1,SVM
     - 0.862,kernel=poly,C=0.5,gamma=0.0078125,degree=1,SVM
@@ -157,3 +159,106 @@ python src/plot_best_four.py -i result/best_results.dat
 -----
 
 ## Experiment2
+
+The dataset used in Experiment1 has shape (4998, 3005). Compared to the samples, there seems to be too many features. Hence, in Experiment2, I implemented feature reduction algorithm PCA to reduce the dimension of the data.
+
+### Source Codes
+
+- `main_knn2.py`
+- `main_rf2.py`
+- `main_svm2.py`
+- `main_nn2.py`
+
+### Preprocessing
+
+`data_cleaning_pca.py`
+
+- Input
+    - expressionmRNAAnnotations.txt
+    - kfold (integer)
+    - n (integer) for number of basis vectors to use
+- Procedure
+    - Cleans the data, then creates data matrix X and corresponding label vector y
+    - Reduces the dimension of the dataset by applying PCA.
+    - Prepares k sets of trainset and testset using cross-validation
+    - Saves the datasets as npz file format
+
+Example code for creating datasets by selecting top 100 basis vectors
+
+```
+python src/data_cleaning_pca.py -i data/expressionmRNAAnnotations.txt -o data/dataset_pca100 -kfold 5 -n 100
+```
+
+### Classifier 
+
+I tried the good working parameters sets found in Experiment1 for each classifier. I changed each main function of the classifcation algorithm so that all the needed parameteres can be put in as parameters from terminal. For each algorithm, I used two different sets of good working parameters. I tried selecting different number of basis vectors using pca: 50, 100, 200, 400, 500, 800, 1600.
+
+Results are saved here:
+
+- pca50.dat
+- pca100.dat
+- pca200.dat
+- pca400.dat
+- pca500.dat
+- pca800.dat
+- pca1600.dat
+
+### Testing
+
+Use the good parameter sets found above and feed them as parameter sets for each classification algorithms.
+
+Example code using 100 basis vectors dataset
+
+```
+python src/main_svm2.py -i data/dataset_pca100.npz -C 0.125 -kernel linear
+python src/main_svm2.py -i data/dataset_pca100.npz -C 0.125 -kernel poly -gamma 0.03125 -degree 1
+python src/main_knn2.py -i data/dataset_pca100.npz -n 7 -weights uniform
+python src/main_knn2.py -i data/dataset_pca100.npz -n 7 -weights distance
+python src/main_nn2.py -i data/dataset_pca100.npz -hls 64 64 64 -activation tanh -solver lbfgs -alpha 0.5
+python src/main_nn2.py -i data/dataset_pca100.npz -hls 32 64 64 -activation relu -solver lbfgs -alpha 0.00048828125
+python src/main_rf2.py -i data/dataset_pca100.npz -criterion gini -n 1024 -minss 2
+python src/main_rf2.py -i data/dataset_pca100.npz -criterion entropy -n 1024 -minss 4
+```
+
+Following bash scripts tests classification with different number of basis vectors.
+
+```
+./src/experiment2_50.sh
+./src/experiment2_100.sh
+./src/experiment2_200.sh
+./src/experiment2_400.sh
+./src/experiment2_500.sh
+./src/experiment2_800.sh
+./src/experiment2_1600.sh
+```
+
+### Result
+
+Output using 100 basis vectors dataset
+
+- knn
+    - 0.836,n=7,weights=uniform,kNN
+    - 0.839,n=7,weights=distance,kNN
+- svm:
+    - 0.883,kernel=linear,C=0.125,SVM
+    - 0.876,kernel=poly,C=0.125,gamma=0.03125,degree=1,SVM
+- nn:
+    - 0.871,hls=(64, 64, 64),alpha=0.5,activation=tanh,solver=lbfgs,NeuralNetwork
+    - 0.881,hls=(32, 64, 64),alpha=0.00048828125,activation=relu,solver=lbfgs,NeuralNetwork
+- rf:
+    - 0.859,criterion=gini,n=1024,minss=2,RandomForest
+    - 0.858,criterion=entropy,n=1024,minss=4,RandomForest
+
+I drew the comparison plots by selecting the highest accuracy of each classifier. For example, I chose 0.839 as the accuracy of knn since 0.839 > 0.836. Following bash script draws all the plots required here.
+
+```
+./src/draw_plots.sh
+```
+
+!["Accuracy comparison plot pca50"](./plots/pca50.png)
+!["Accuracy comparison plot pca100"](./plots/pca100.png)
+!["Accuracy comparison plot pca200"](./plots/pca200.png)
+!["Accuracy comparison plot pca400"](./plots/pca400.png)
+!["Accuracy comparison plot pca500"](./plots/pca500.png)
+!["Accuracy comparison plot pca800"](./plots/pca800.png)
+<!--!["Accuracy comparison plot pca1600"](./plots/pca1600.png)-->
