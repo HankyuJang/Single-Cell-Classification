@@ -274,4 +274,25 @@ I drew the comparison plots by selecting the highest accuracy of each classifier
 
 ## Conclusion
 
-After reducing dimensions using PCA, overall accuracy of classifiers increased except Neural Network. In Experiment 1, accuracy of knn was only about 0.7, but after reducing the dimension, accuracy of knn increased. From the graphs, I can see that kNN works best when choosing 50 basis vectors, but the performance of kNN decreases as the number of basis vectors increase. Since PCA chooses basis vectors according to its eigenvalues, ...
+- Choosing appropriate number of basis vectors for dimension reduction is important
+- If you decrease the dimension too much, the basis vectors would not represent the dataset
+- Using around 50 to 100 basis vectors performed well on most of the classifiers
+- Dimensionality reduction had different effect on each of the classifiers:
+    - SVM
+        - Accuracy(Original): 0.862
+        - Accuracy(After Dimension Reduction with 100 basis vectors): 0.886
+    - kNN
+        - Accuracy(Original): 0.7
+        - Accuracy(After Dimension Reduction with 50 basis vectors): 0.843
+    - NN (performed decreased slightly)
+        - Accuracy(Original): 0.895
+        - Accuracy(After Dimension Reduction with 100 basis vectors): 0.884
+    - RF
+        - Accuracy(Original): 0.823
+        - Accuracy(After Dimension Reduction with 50 basis vectors): 0.867
+
+From the above result, choosing 50 ~ 100 basis vectors for dimension reduction seemed to be a resonable choice.
+
+## For the future...
+
+If choose number of basis in (50, 100) range, and with more different sets of parameters, there's chance to find a model that best describes the dataset. 
