@@ -191,10 +191,13 @@ python src/data_cleaning_pca.py -i data/expressionmRNAAnnotations.txt -o data/da
 
 ### Classifier 
 
-I tried the good working parameters sets found in Experiment1 for each classifier. I changed each main function of the classifcation algorithm so that all the needed parameteres can be put in as parameters from terminal. For each algorithm, I used two different sets of good working parameters. I tried selecting different number of basis vectors using pca: 50, 100, 200, 400, 500, 800, 1600.
+I tried the good working parameters sets found in Experiment1 for each classifier. I changed each main function of the classifcation algorithm so that all the needed parameteres can be put in as parameters from terminal. For each algorithm, I used two different sets of good working parameters. I tried selecting different number of basis vectors using pca: 7, 13, 25, 50, 100, 200, 400, 500, 800, 1600.
 
 Results are saved here:
 
+- pca7.dat
+- pca13.dat
+- pca25.dat
 - pca50.dat
 - pca100.dat
 - pca200.dat
@@ -223,6 +226,9 @@ python src/main_rf2.py -i data/dataset_pca100.npz -criterion entropy -n 1024 -mi
 Following bash scripts tests classification with different number of basis vectors.
 
 ```
+./src/experiment2_7.sh
+./src/experiment2_13.sh
+./src/experiment2_25.sh
 ./src/experiment2_50.sh
 ./src/experiment2_100.sh
 ./src/experiment2_200.sh
@@ -255,10 +261,17 @@ I drew the comparison plots by selecting the highest accuracy of each classifier
 ./src/draw_plots.sh
 ```
 
+!["Accuracy comparison plot pca7"](./plots/pca7.png)
+!["Accuracy comparison plot pca13"](./plots/pca13.png)
+!["Accuracy comparison plot pca25"](./plots/pca25.png)
 !["Accuracy comparison plot pca50"](./plots/pca50.png)
 !["Accuracy comparison plot pca100"](./plots/pca100.png)
 !["Accuracy comparison plot pca200"](./plots/pca200.png)
 !["Accuracy comparison plot pca400"](./plots/pca400.png)
 !["Accuracy comparison plot pca500"](./plots/pca500.png)
 !["Accuracy comparison plot pca800"](./plots/pca800.png)
-<!--!["Accuracy comparison plot pca1600"](./plots/pca1600.png)-->
+!["Accuracy comparison plot pca1600"](./plots/pca1600.png)
+
+## Conclusion
+
+After reducing dimensions using PCA, overall accuracy of classifiers increased except Neural Network. In Experiment 1, accuracy of knn was only about 0.7, but after reducing the dimension, accuracy of knn increased. From the graphs, I can see that kNN works best when choosing 50 basis vectors, but the performance of kNN decreases as the number of basis vectors increase. Since PCA chooses basis vectors according to its eigenvalues, ...
