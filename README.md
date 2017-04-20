@@ -156,6 +156,19 @@ python src/plot_best_four.py -i result/best_results.dat
 
 !["Accuracy comparison plot"](./plots/experiment1.png)
 
+I used 5-fold cross-validation for above plot. I also generated boxplots that correspond to the above plot. To get the accuracies for each subset of the k-fold, I slightly modified the main functions for each classifier. Following scripts create the boxplot.
+
+```
+python src/main_knn3.py -i data/dataset.npz -n 7 -weights distance > result/boxplot_original.dat
+python src/main_svm3.py -i data/dataset.npz -C 0.125 -kernel poly -gamma 0.03125 -degree 1 >> result/boxplot_original.dat
+python src/main_rf3.py -i data/dataset.npz -criterion gini -n 1024 -minss 2 >> result/boxplot_original.dat
+python src/main_nn3.py -i data/dataset.npz -hls 64 64 64 -activation tanh -solver lbfgs -alpha 0.5 >> result/boxplot_original.dat
+
+python src/plot_best_four_boxplot.py -i result/boxplot_original.dat -k 5 -t Performance_comparison_original -o plots/boxplot_original.png
+```
+
+!["Accuracy comparison boxplot"](./plots/boxplot_original.png)
+
 -----
 
 ## Experiment2
@@ -292,6 +305,9 @@ I drew the comparison plots by selecting the highest accuracy of each classifier
         - Accuracy(After Dimension Reduction with 50 basis vectors): 0.867
 
 From the above result, choosing 50 ~ 100 basis vectors for dimension reduction seemed to be a resonable choice.
+
+Here's the final boxplot using the best choice of the number of basis vectors for PCA dimentionality reduction.
+!["Accuracy comparison boxplot"](./plots/boxplot_pca.png)
 
 ## For the future...
 
