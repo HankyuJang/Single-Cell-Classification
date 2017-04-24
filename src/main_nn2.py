@@ -23,8 +23,10 @@ if __name__ == '__main__':
 
     # Load the dataset
     dataset = np.load(args.infile)
-    trainset = dataset["Train"]
-    testset = dataset["Test"]
+    X_train = dataset["X_train"]
+    y_train = dataset["y_train"]
+    X_test = dataset["X_test"]
+    y_test = dataset["y_test"]
     k_fold = dataset["Kfold"]
 
     alpha_list = np.power(2.0, np.arange(-14, 1))
@@ -36,11 +38,7 @@ if __name__ == '__main__':
     # Neural Network
     accuracy_list = np.zeros(k_fold)
     for i in range(k_fold):
-        X_train = trainset[i][0]
-        y_train = trainset[i][1]
-        X_test = testset[i][0]
-        y_test = testset[i][1]
-        pred = classification_algo.neural_network(X_train, y_train, X_test, hls, args.activation, args.solver, alpha)
-        accuracy = sklearn.metrics.accuracy_score(y_test, pred)
+        pred = classification_algo.neural_network(X_train[i], y_train[i], X_test[i], hls, args.activation, args.solver, alpha)
+        accuracy = sklearn.metrics.accuracy_score(y_test[i], pred)
         accuracy_list[i] = accuracy
     print("{0:.3f},hls={1},alpha={2},activation={3},solver={4},NeuralNetwork".format(accuracy_list.mean(),hls,alpha,args.activation,args.solver))

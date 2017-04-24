@@ -25,37 +25,32 @@ if __name__ == '__main__':
     print("Loading the dataset...")
     # Load the dataset
     dataset = np.load(args.infile)
-    trainset = dataset["Train"]
-    testset = dataset["Test"]
+    X_train = dataset["X_train"]
+    y_train = dataset["y_train"]
+    X_test = dataset["X_test"]
+    y_test = dataset["y_test"]
     k_fold = dataset["Kfold"]
 
-    # Use 125 different hidden layers (2, 2, 2) to (32, 32, 32)
-    # alpha: 2^(-14) ~ 1
+    # Use 125 different hidden layers (16, 16, 16) to (64, 64, 64)
+    # alpha: 2^(-8) ~ 1
     hls_list = []
-    for i in np.power(2, np.arange(5, 7)):
-        for j in np.power(2, np.arange(5, 7)):
-            for k in np.power(2, np.arange(5, 7)):
+    for i in np.power(2, np.arange(4, 7)):
+        for j in np.power(2, np.arange(4, 7)):
+            for k in np.power(2, np.arange(4, 7)):
                 hls_list.append((i, j, k))
-    alpha_list = np.power(2.0, np.arange(-14, 1))
+    alpha_list = np.power(2.0, np.arange(-8, 1))
     # activation_tuple = ("identity", "logistic", "tanh", "relu")
     # solver_tuple = ("lbfgs", "sgd", "adam")
 
     #####################################################################
     # Neural Network
-
     print('-'*60)
     print("\nNeural Network")
     for hls in hls_list:
         for alpha in alpha_list:
             accuracy_list = np.zeros(k_fold)
             for i in range(k_fold):
-                X_train = trainset[i][0]
-                y_train = trainset[i][1]
-                X_test = testset[i][0]
-                y_test = testset[i][1]
-                pred = classification_algo.neural_network(X_train, y_train, X_test, hls, args.activation, args.solver, alpha)
-                accuracy = sklearn.metrics.accuracy_score(y_test, pred)
-                #  print("Run: {}, {}".format(i+1, accuracy))
+                pred = classification_algo.neural_network(X_train[i], y_train[i], X_test[i], hls, args.activation, args.solver, alpha)
+                accuracy = sklearn.metrics.accuracy_score(y_test[i], pred)
                 accuracy_list[i] = accuracy
             print("{0:.3f},hls={1},alpha={2},activation={3},solver={4},NeuralNetwork".format(accuracy_list.mean(),hls,alpha,args.activation,args.solver))
-            #  print("\nAverage accuracy for Neural Network classifierl: {0:.3f}".format(accuracy.mean()))

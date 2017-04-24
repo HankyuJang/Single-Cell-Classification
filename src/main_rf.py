@@ -20,8 +20,10 @@ if __name__ == '__main__':
     print("Loading the dataset...")
     # Load the dataset
     dataset = np.load(args.infile)
-    trainset = dataset["Train"]
-    testset = dataset["Test"]
+    X_train = dataset["X_train"]
+    y_train = dataset["y_train"]
+    X_test = dataset["X_test"]
+    y_test = dataset["y_test"]
     k_fold = dataset["Kfold"]
 
     # number of trees: 4, 8, ... , 4096
@@ -29,9 +31,9 @@ if __name__ == '__main__':
     criterion_tuple = ("gini", "entropy")
     n_list = np.power(2, np.arange(2, 13))
     minss_list = np.power(2, np.arange(1, 6))
+    
     #####################################################################
     # Random Forest
-
     print('-'*60)
     print("\nRandom Forest")
     for criterion in criterion_tuple:
@@ -39,12 +41,7 @@ if __name__ == '__main__':
             for minss in minss_list:
                 accuracy_list = np.zeros(k_fold)
                 for i in range(k_fold):
-                    X_train = trainset[i][0]
-                    y_train = trainset[i][1]
-                    X_test = testset[i][0]
-                    y_test = testset[i][1]
-                    pred = classification_algo.random_forest(X_train, y_train, X_test, n, criterion, minss)
-                    accuracy = sklearn.metrics.accuracy_score(y_test, pred)
-                    #  print("Run: {}, {}".format(i+1, accuracy))
+                    pred = classification_algo.random_forest(X_train[i], y_train[i], X_test[i], n, criterion, minss)
+                    accuracy = sklearn.metrics.accuracy_score(y_test[i], pred)
                     accuracy_list[i] = accuracy
                 print("{0:.3f},criterion={1},n={2},minss={3},RandomForest".format(accuracy_list.mean(),criterion,n,minss))

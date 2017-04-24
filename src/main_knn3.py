@@ -16,8 +16,10 @@ if __name__ == '__main__':
 
     # Load the dataset
     dataset = np.load(args.infile)
-    trainset = dataset["Train"]
-    testset = dataset["Test"]
+    X_train = dataset["X_train"]
+    y_train = dataset["y_train"]
+    X_test = dataset["X_test"]
+    y_test = dataset["y_test"]
     k_fold = dataset["Kfold"]
 
     n = args.n
@@ -25,10 +27,6 @@ if __name__ == '__main__':
 
     accuracy_list = np.zeros(k_fold)
     for i in range(k_fold):
-        X_train = trainset[i][0]
-        y_train = trainset[i][1]
-        X_test = testset[i][0]
-        y_test = testset[i][1]
-        pred = classification_algo.k_nearest_neighbor(X_train, y_train, X_test, n, weights)
-        accuracy = sklearn.metrics.accuracy_score(y_test, pred)
+        pred = classification_algo.k_nearest_neighbor(X_train[i], y_train[i], X_test[i], n, weights)
+        accuracy = sklearn.metrics.accuracy_score(y_test[i], pred)
         print("{0:.3f},n={1},weights={2},kNN".format(accuracy,n,weights))

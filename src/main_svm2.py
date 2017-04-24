@@ -20,8 +20,10 @@ if __name__ == '__main__':
 
     # Load the dataset
     dataset = np.load(args.infile)
-    trainset = dataset["Train"]
-    testset = dataset["Test"]
+    X_train = dataset["X_train"]
+    y_train = dataset["y_train"]
+    X_test = dataset["X_test"]
+    y_test = dataset["y_test"]
     k_fold = dataset["Kfold"]
 
     kernel = args.kernel
@@ -32,35 +34,23 @@ if __name__ == '__main__':
     if kernel == 'poly':
         accuracy_list = np.zeros(k_fold)
         for i in range(k_fold):
-            X_train = trainset[i][0]
-            y_train = trainset[i][1]
-            X_test = testset[i][0]
-            y_test = testset[i][1]
-            pred = classification_algo.support_vector_machine(X_train, y_train, X_test, C, kernel, degree, gamma)
-            accuracy = sklearn.metrics.accuracy_score(y_test, pred)
+            pred = classification_algo.support_vector_machine(X_train[i], y_train[i], X_test[i], C, kernel, degree, gamma)
+            accuracy = sklearn.metrics.accuracy_score(y_test[i], pred)
             accuracy_list[i] = accuracy
         print("{0:.3f},kernel={1},C={2},gamma={3},degree={4},SVM".format(accuracy_list.mean(),kernel,C,gamma,degree))
 
     elif kernel == 'linear':
         accuracy_list = np.zeros(k_fold)
         for i in range(k_fold):
-            X_train = trainset[i][0]
-            y_train = trainset[i][1]
-            X_test = testset[i][0]
-            y_test = testset[i][1]
-            pred = classification_algo.support_vector_machine(X_train, y_train, X_test, C, kernel, None, None)
-            accuracy = sklearn.metrics.accuracy_score(y_test, pred)
+            pred = classification_algo.support_vector_machine(X_train[i], y_train[i], X_test[i], C, kernel, None, None)
+            accuracy = sklearn.metrics.accuracy_score(y_test[i], pred)
             accuracy_list[i] = accuracy
         print("{0:.3f},kernel={1},C={2},SVM".format(accuracy_list.mean(),kernel,C))
     else:
         accuracy_list = np.zeros(k_fold)
         for i in range(k_fold):
-            X_train = trainset[i][0]
-            y_train = trainset[i][1]
-            X_test = testset[i][0]
-            y_test = testset[i][1]
-            pred = classification_algo.support_vector_machine(X_train, y_train, X_test, C, kernel, None, gamma)
-            accuracy = sklearn.metrics.accuracy_score(y_test, pred)
+            pred = classification_algo.support_vector_machine(X_train[i], y_train[i], X_test[i], C, kernel, None, gamma)
+            accuracy = sklearn.metrics.accuracy_score(y_test[i], pred)
             accuracy_list[i] = accuracy
         print("{0:.3f},kernel={1},C={2},gamma={3},SVM".format(accuracy_list.mean(),kernel,C,gamma))
 

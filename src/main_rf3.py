@@ -18,8 +18,10 @@ if __name__ == '__main__':
 
     # Load the dataset
     dataset = np.load(args.infile)
-    trainset = dataset["Train"]
-    testset = dataset["Test"]
+    X_train = dataset["X_train"]
+    y_train = dataset["y_train"]
+    X_test = dataset["X_test"]
+    y_test = dataset["y_test"]
     k_fold = dataset["Kfold"]
 
     criterion = args.criterion
@@ -29,10 +31,6 @@ if __name__ == '__main__':
     #####################################################################
     # Random Forest
     for i in range(k_fold):
-        X_train = trainset[i][0]
-        y_train = trainset[i][1]
-        X_test = testset[i][0]
-        y_test = testset[i][1]
-        pred = classification_algo.random_forest(X_train, y_train, X_test, n, criterion, minss)
-        accuracy = sklearn.metrics.accuracy_score(y_test, pred)
+        pred = classification_algo.random_forest(X_train[i], y_train[i], X_test[i], n, criterion, minss)
+        accuracy = sklearn.metrics.accuracy_score(y_test[i], pred)
         print("{0:.3f},criterion={1},n={2},minss={3},RandomForest".format(accuracy,criterion,n,minss))
