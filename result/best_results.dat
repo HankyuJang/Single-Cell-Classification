@@ -1,4 +1,4 @@
-0.701,n=7,weights=distance,kNN
-0.823,criterion=gini,n=1024,minss=2,RandomForest
-0.862,kernel=poly,C=0.125,gamma=0.03125,degree=1,SVM
-0.895,hls=(64, 64, 64),alpha=0.5,activation=tanh,solver=lbfgs,NeuralNetwork
+0.916,n=3,weights=uniform,kNN
+0.958,criterion=gini,n=128,minss=4,RandomForest
+0.960,hls=(32, 32, 64),alpha=0.00390625,activation=identity,solver=adam,NeuralNetwork
+0.961,kernel=poly,C=0.125,gamma=0.001953125,degree=1,SVM

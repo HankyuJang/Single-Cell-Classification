@@ -27,7 +27,7 @@ def plot_accuracy(X, label, title, xlabel, ylabel, filename):
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
     # plt.ylim(X.min()-0.05, X.max()+0.05)
-    plt.ylim(0.65, 0.95)
+    # plt.ylim(0.65, 0.95)
     plt.savefig(filename, format=filename.split('.')[-1])
     plt.show()
 
