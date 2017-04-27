@@ -47,9 +47,6 @@ def prepare_train_test_using_kfold(k, X, y):
     y_test = []
     print(kf)
     for train_index, test_index in kf.split(X):
-        # X_train, X_test = X[train_index], X[test_index]
-        # y_train, y_test = y[train_index], y[test_index]
-        
         X_train.append(X[train_index])
         y_train.append(y[train_index])
         X_test.append(X[test_index])
