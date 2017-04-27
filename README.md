@@ -9,9 +9,9 @@
 
 ## Datasets
 
-- line 8: Header
-- line 12 ~ line 5009: data with labels from 1 to 9
-- data: column 1: cell name, column 2: label, column 3: activation level
+- line 2: group (label)
+- line 12 ~ line 5009: data (gene expression level)
+- data: column 3 ~ : activation levels
 
 ### Prerequisite
 
@@ -86,7 +86,7 @@ python src/main_rf.py -i data/dataset.npz
     - kernel: 'linear', 'poly', 'rbf', 'sigmoid'
     - penalty parameter C of the error term: 2^(-3), 2^(-1), ..., 2^(15)
     - gamma (Kernel coefficient for 'rbf', 'poly' and 'sigmoid'): 2^(-15), 2^(-13), ..., 2^(3)
-    - degree of the polynomial kernel function: 1, 2, ... , 6
+    - degree of the polynomial kernel function: 1, 2, ... , 4
 
 ```
 python src/main_svm.py -i data/dataset.npz -kernel linear
@@ -97,31 +97,21 @@ python src/main_svm.py -i data/dataset.npz -kernel sigmoid
 
 - Parameter tuning for Neural Network
 
-    - hidden layers: 125 different hidden layers (2, 2, 2) to (32, 32, 32)125 different hidden layers (2, 2, 2) to (32, 32, 32)
+    - hidden layers: 125 different hidden layers (2, 2, 2) to (32, 32, 32)125 different hidden layers (16, 16, 16) to (64, 64, 64)
     - activation function for the hidden layer: 
         - identity: f(x) = x
         - logistic: f(x) = 1 / (1 + exp(-x))
         - tanh: f(x) = tanh(x)
         - relu: f(x) = max(0, x)
     - solver for weight optimization:
-        - 'lbfgs' is an optimizer in the family of quasi-Newton methods
-        - 'sgd' ref    ers to stochastic gradient descent
         - 'adam' refers to a stochastic gradient-based optimizer proposed by Kingma, Diederik, and Ji    mmy
-        - note: The default solver 'adam' works pretty well on relatively large datasets (with thousands of training samples or mo    re) in terms of both training time and validation score. For small datasets, however, 'lbfgs' can converge faster and perform b    etter. 
-    - alpha(L2 penalty (regularization term) parameter): 2^(-14), 2^(-13), ... , 1
+        - note: The default solver 'adam' works pretty well on relatively large datasets (with thousands of training samples or more) in terms of both training time and validation score. For small datasets, however, 'lbfgs' can converge faster and perform better. 
+    - alpha(L2 penalty (regularization term) parameter): 2^(-8), 2^(-7), ... , 1
 
 ```
-python src/main_nn.py -i data/dataset.npz -activation identity -solver lbfgs
-python src/main_nn.py -i data/dataset.npz -activation identity -solver sgd
 python src/main_nn.py -i data/dataset.npz -activation identity -solver adam
-python src/main_nn.py -i data/dataset.npz -activation logistic -solver lbfgs
-python src/main_nn.py -i data/dataset.npz -activation logistic -solver sgd
 python src/main_nn.py -i data/dataset.npz -activation logistic -solver adam
-python src/main_nn.py -i data/dataset.npz -activation tanh -solver lbfgs
-python src/main_nn.py -i data/dataset.npz -activation tanh -solver sgd
 python src/main_nn.py -i data/dataset.npz -activation tanh -solver adam
-python src/main_nn.py -i data/dataset.npz -activation relu -solver lbfgs
-python src/main_nn.py -i data/dataset.npz -activation relu -solver sgd
 python src/main_nn.py -i data/dataset.npz -activation relu -solver adam
 ```
 
@@ -130,41 +120,18 @@ python src/main_nn.py -i data/dataset.npz -activation relu -solver adam
 Best parameter sets found for each classifier
 
 - knn: 
-    - 0.701,n=7,weights=distance,kNN
-    - 0.700,n=5,weights=uniform,kNN
+    - 0.916,n=3,weights=uniform,kNN
 - rf: 
-    - 0.823,criterion=gini,n=1024,minss=2,RandomForest
-    - 0.815,criterion=entropy,n=1024,minss=4,RandomForest
+    - 0.958,criterion=gini,n=128,minss=4,RandomForest
 - svm: linear kernel produced accuracy: 0.859 regardless of C. polynomial kernel performs slightly better with fine tuning.
-    - 0.862,kernel=poly,C=0.125,gamma=0.03125,degree=1,SVM
-    - 0.862,kernel=poly,C=0.5,gamma=0.0078125,degree=1,SVM
-    - 0.862,kernel=poly,C=2.0,gamma=0.001953125,degree=1,SVM
-    - 0.862,kernel=poly,C=8.0,gamma=0.00048828125,degree=1,SVM
-    - 0.862,kernel=poly,C=32.0,gamma=0.0001220703125,degree=1,SVM
-    - 0.862,kernel=poly,C=128.0,gamma=3.0517578125e-05,degree=1,SVM
-    - 0.859,kernel=linear,C=0.125,SVM 
-- nn: activation=tanh worked the best among other activations. relu also works well.
-    - 0.895,hls=(64, 64, 64),alpha=0.5,activation=tanh,solver=lbfgs,NeuralNetwork
-    - 0.894,hls=(64, 64, 32),alpha=0.5,activation=tanh,solver=lbfgs,NeuralNetwork
-    - 0.883,hls=(32, 64, 64),alpha=0.00048828125,activation=relu,solver=lbfgs,NeuralNetwork
+    - 0.961,kernel=poly,C=0.125,gamma=0.001953125,degree=1,SVM
+- nn: 
+    - 0.960,hls=(32, 32, 64),alpha=0.00390625,activation=identity,solver=adam,NeuralNetwork
 
-I plotted the the best accuracy for each classifier.
+I used 5-fold cross-validation for the experiment. Following boxplot is drawn from the above parameter sets.
 
 ```
-python src/plot_best_four.py -i result/best_results.dat
-```
-
-!["Accuracy comparison plot"](./plots/experiment1.png)
-
-I used 5-fold cross-validation for above plot. I also generated boxplots that correspond to the above plot. To get the accuracies for each subset of the k-fold, I slightly modified the main functions for each classifier. Following scripts create the boxplot.
-
-```
-python src/main_knn3.py -i data/dataset.npz -n 7 -weights distance > result/boxplot_original.dat
-python src/main_svm3.py -i data/dataset.npz -C 0.125 -kernel poly -gamma 0.03125 -degree 1 >> result/boxplot_original.dat
-python src/main_rf3.py -i data/dataset.npz -criterion gini -n 1024 -minss 2 >> result/boxplot_original.dat
-python src/main_nn3.py -i data/dataset.npz -hls 64 64 64 -activation tanh -solver lbfgs -alpha 0.5 >> result/boxplot_original.dat
-
-python src/plot_best_four_boxplot.py -i result/boxplot_original.dat -k 5 -t Performance_comparison_original -o plots/boxplot_original.png
+./src/draw_bosplot.sh
 ```
 
 !["Accuracy comparison boxplot"](./plots/boxplot_original.png)
@@ -173,7 +140,7 @@ python src/plot_best_four_boxplot.py -i result/boxplot_original.dat -k 5 -t Perf
 
 ## Experiment2
 
-The dataset used in Experiment1 has shape (4998, 3005). Compared to the samples, there seems to be too many features. Hence, in Experiment2, I implemented feature reduction algorithm PCA to reduce the dimension of the data.
+The dataset used in Experiment1 has shape (3005, 4998). Compared to the samples, there seems to be too many features. Hence, in Experiment2, I implemented feature reduction algorithm PCA to reduce the dimension of the data.
 
 ### Source Codes
 
@@ -226,89 +193,50 @@ Use the good parameter sets found above and feed them as parameter sets for each
 Example code using 100 basis vectors dataset
 
 ```
-python src/main_svm2.py -i data/dataset_pca100.npz -C 0.125 -kernel linear
-python src/main_svm2.py -i data/dataset_pca100.npz -C 0.125 -kernel poly -gamma 0.03125 -degree 1
-python src/main_knn2.py -i data/dataset_pca100.npz -n 7 -weights uniform
-python src/main_knn2.py -i data/dataset_pca100.npz -n 7 -weights distance
-python src/main_nn2.py -i data/dataset_pca100.npz -hls 64 64 64 -activation tanh -solver lbfgs -alpha 0.5
-python src/main_nn2.py -i data/dataset_pca100.npz -hls 32 64 64 -activation relu -solver lbfgs -alpha 0.00048828125
-python src/main_rf2.py -i data/dataset_pca100.npz -criterion gini -n 1024 -minss 2
-python src/main_rf2.py -i data/dataset_pca100.npz -criterion entropy -n 1024 -minss 4
+python src/main_svm2.py -i data/dataset_pca100.npz -C 0.125 -kernel poly -gamma 0.001953125 -degree 1 > result/pca100.dat
+python src/main_knn2.py -i data/dataset_pca100.npz -n 3 -weights uniform >> result/pca100.dat
+python src/main_nn2.py -i data/dataset_pca100.npz -hls 32 32 64 -activation identity -solver adam -alpha 0.00390625 >> result/pca100.dat
+python src/main_rf2.py -i data/dataset_pca100.npz -criterion gini -n 128 -minss 4 >> result/pca100.dat
 ```
 
-Following bash scripts tests classification with different number of basis vectors.
+Following bash script tests classification with different number of basis vectors.
 
 ```
-./src/experiment2_7.sh
-./src/experiment2_13.sh
-./src/experiment2_25.sh
-./src/experiment2_50.sh
-./src/experiment2_100.sh
-./src/experiment2_200.sh
-./src/experiment2_400.sh
-./src/experiment2_500.sh
-./src/experiment2_800.sh
-./src/experiment2_1600.sh
+./src/experiment2.sh
 ```
 
 ### Result
 
 Output using 100 basis vectors dataset
 
-- knn
-    - 0.836,n=7,weights=uniform,kNN
-    - 0.839,n=7,weights=distance,kNN
+- knn:
+    - 0.917,n=3,weights=uniform,kNN
 - svm:
-    - 0.883,kernel=linear,C=0.125,SVM
-    - 0.876,kernel=poly,C=0.125,gamma=0.03125,degree=1,SVM
+    - 0.957,kernel=poly,C=0.125,gamma=0.001953125,degree=1,SVM
 - nn:
-    - 0.871,hls=(64, 64, 64),alpha=0.5,activation=tanh,solver=lbfgs,NeuralNetwork
-    - 0.881,hls=(32, 64, 64),alpha=0.00048828125,activation=relu,solver=lbfgs,NeuralNetwork
+    - 0.926,hls=(32, 32, 64),alpha=0.00390625,activation=identity,solver=adam,NeuralNetwork
 - rf:
-    - 0.859,criterion=gini,n=1024,minss=2,RandomForest
-    - 0.858,criterion=entropy,n=1024,minss=4,RandomForest
+    - 0.938,criterion=gini,n=128,minss=4,RandomForest
 
-I drew the comparison plots by selecting the highest accuracy of each classifier. For example, I chose 0.839 as the accuracy of knn since 0.839 > 0.836. Following bash script draws all the plots required here.
+Here's one plot with pca in the x axis and corresponding accuracies for each algorithm on the y axis.
 
 ```
-./src/draw_plots.sh
+python ./src/plot_pca_sweep.py -i1 ./result/pca7.dat -i2 ./result/pca13.dat -i3 ./result/pca25.dat -i4 ./result/pca50.dat -i5 ./result/pca100.dat -i6 ./result/pca200.dat -i7 ./result/pca400.dat -i8 ./result/pca800.dat -i9 ./result/pca1600.dat
 ```
 
-!["Accuracy comparison plot pca7"](./plots/pca7.png)
-!["Accuracy comparison plot pca13"](./plots/pca13.png)
-!["Accuracy comparison plot pca25"](./plots/pca25.png)
-!["Accuracy comparison plot pca50"](./plots/pca50.png)
-!["Accuracy comparison plot pca100"](./plots/pca100.png)
-!["Accuracy comparison plot pca200"](./plots/pca200.png)
-!["Accuracy comparison plot pca400"](./plots/pca400.png)
-!["Accuracy comparison plot pca500"](./plots/pca500.png)
-!["Accuracy comparison plot pca800"](./plots/pca800.png)
-!["Accuracy comparison plot pca1600"](./plots/pca1600.png)
+!["Accuracy comparison plot"](./plots/experiment2.png)
 
 ## Conclusion
 
 - Choosing appropriate number of basis vectors for dimension reduction is important
 - If you decrease the dimension too much, the basis vectors would not represent the dataset
-- Using around 50 to 100 basis vectors performed well on most of the classifiers
 - Dimensionality reduction had different effect on each of the classifiers:
-    - SVM
-        - Accuracy(Original): 0.862
-        - Accuracy(After Dimension Reduction with 100 basis vectors): 0.886
-    - kNN
-        - Accuracy(Original): 0.7
-        - Accuracy(After Dimension Reduction with 50 basis vectors): 0.843
-    - NN (performed decreased slightly)
-        - Accuracy(Original): 0.895
-        - Accuracy(After Dimension Reduction with 100 basis vectors): 0.884
-    - RF
-        - Accuracy(Original): 0.823
-        - Accuracy(After Dimension Reduction with 50 basis vectors): 0.867
+- kNN uses nearest neighbors in the algorithm. Hence, PCA dimensionality reduction increased the accuracy of kNN when using fairly small number of basis vectors (50).
+- Other classifiers were complicated enough for PCA to have effect on the accuracy.
 
-From the above result, choosing 50 ~ 100 basis vectors for dimension reduction seemed to be a resonable choice.
-
-Here's the final boxplot using the best choice of the number of basis vectors for PCA dimentionality reduction.
-!["Accuracy comparison boxplot"](./plots/boxplot_pca.png)
+Here's the final boxplot using the best choice of the number of basis vectors for PCA dimentionality reduction for kNN and others using original data.
+!["Accuracy comparison boxplot"](./plots/boxplot_final.png)
 
 ## For the future...
 
-If choose number of basis in (50, 100) range, and with more different sets of parameters, there's chance to find a model that best describes the dataset. 
+With more different sets of parameters, there would be chance to find a model that best describes the dataset. 
