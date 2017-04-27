@@ -1,0 +1,4 @@
+0.960,kernel=poly,C=0.125,gamma=0.001953125,degree=1,SVM
+0.918,n=3,weights=uniform,kNN
+0.934,hls=(32, 32, 64),alpha=0.00390625,activation=identity,solver=adam,NeuralNetwork
+0.904,criterion=gini,n=128,minss=4,RandomForest

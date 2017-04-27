@@ -1,0 +1,9 @@
+./src/experiment2_7.sh
+./src/experiment2_13.sh
+./src/experiment2_25.sh
+./src/experiment2_50.sh
+./src/experiment2_100.sh
+./src/experiment2_200.sh
+./src/experiment2_400.sh
+./src/experiment2_800.sh
+./src/experiment2_1600.sh
