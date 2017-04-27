@@ -1,0 +1,20 @@
+0.922,n=3,weights=uniform,kNN
+0.925,n=3,weights=uniform,kNN
+0.910,n=3,weights=uniform,kNN
+0.920,n=3,weights=uniform,kNN
+0.933,n=3,weights=uniform,kNN
+0.967,kernel=poly,C=0.125,gamma=0.001953125,degree=1,SVM
+0.945,kernel=poly,C=0.125,gamma=0.001953125,degree=1,SVM
+0.965,kernel=poly,C=0.125,gamma=0.001953125,degree=1,SVM
+0.975,kernel=poly,C=0.125,gamma=0.001953125,degree=1,SVM
+0.953,kernel=poly,C=0.125,gamma=0.001953125,degree=1,SVM
+0.950,criterion=gini,n=128,minss=4,RandomForest
+0.958,criterion=gini,n=128,minss=4,RandomForest
+0.960,criterion=gini,n=128,minss=4,RandomForest
+0.963,criterion=gini,n=128,minss=4,RandomForest
+0.942,criterion=gini,n=128,minss=4,RandomForest
+0.950,hls=(32, 32, 64),alpha=0.00390625,activation=identity,solver=adam,NeuralNetwork
+0.917,hls=(32, 32, 64),alpha=0.00390625,activation=identity,solver=adam,NeuralNetwork
+0.958,hls=(32, 32, 64),alpha=0.00390625,activation=identity,solver=adam,NeuralNetwork
+0.962,hls=(32, 32, 64),alpha=0.00390625,activation=identity,solver=adam,NeuralNetwork
+0.948,hls=(32, 32, 64),alpha=0.00390625,activation=identity,solver=adam,NeuralNetwork
