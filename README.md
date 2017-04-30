@@ -117,15 +117,15 @@ python src/main_nn.py -i data/dataset.npz -activation relu -solver adam
 
 ### Result
 
-Best parameter sets found for each classifier
+Best parameter sets found for each classifier: Accuracy changes slightly for each experiment, since the training and testsets are randomly divided into 5 different groups.
 
-- knn: 
-    - 0.916,n=3,weights=uniform,kNN
-- rf: 
+- knn: around 91% accuracy
+    - n=3,weights=uniform,kNN
+- rf: around 95% accuracy 
     - 0.958,criterion=gini,n=128,minss=4,RandomForest
-- svm: 
+- svm: around 96.5% accuracy 
     - 0.961,kernel=poly,C=0.125,gamma=0.001953125,degree=1,SVM
-- nn: 
+- nn: around 96% accuracy 
     - 0.960,hls=(32, 32, 64),alpha=0.00390625,activation=identity,solver=adam,NeuralNetwork
 
 I used 5-fold cross-validation for the experiment. Following boxplot is drawn from the above parameter sets.
@@ -207,7 +207,7 @@ Following bash script tests classification with different number of basis vector
 
 ### Result
 
-Output using 100 basis vectors dataset
+Output using 100 basis vectors dataset (for one particular experiment)
 
 - knn:
     - 0.917,n=3,weights=uniform,kNN
