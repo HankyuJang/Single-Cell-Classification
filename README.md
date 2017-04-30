@@ -97,7 +97,7 @@ python src/main_svm.py -i data/dataset.npz -kernel sigmoid
 
 - Parameter tuning for Neural Network
 
-    - hidden layers: 125 different hidden layers (2, 2, 2) to (32, 32, 32)125 different hidden layers (16, 16, 16) to (64, 64, 64)
+    - hidden layers: 27 different hidden layers (16, 16, 16) to (64, 64, 64)
     - activation function for the hidden layer: 
         - identity: f(x) = x
         - logistic: f(x) = 1 / (1 + exp(-x))
@@ -123,7 +123,7 @@ Best parameter sets found for each classifier
     - 0.916,n=3,weights=uniform,kNN
 - rf: 
     - 0.958,criterion=gini,n=128,minss=4,RandomForest
-- svm: linear kernel produced accuracy: 0.859 regardless of C. polynomial kernel performs slightly better with fine tuning.
+- svm: 
     - 0.961,kernel=poly,C=0.125,gamma=0.001953125,degree=1,SVM
 - nn: 
     - 0.960,hls=(32, 32, 64),alpha=0.00390625,activation=identity,solver=adam,NeuralNetwork
@@ -131,7 +131,7 @@ Best parameter sets found for each classifier
 I used 5-fold cross-validation for the experiment. Following boxplot is drawn from the above parameter sets.
 
 ```
-./src/draw_bosplot.sh
+./src/draw_boxplot.sh
 ```
 
 !["Accuracy comparison boxplot"](./plots/boxplot_original.png)
@@ -233,6 +233,10 @@ python ./src/plot_pca_sweep.py -i1 ./result/pca7.dat -i2 ./result/pca13.dat -i3 
 - Dimensionality reduction had different effect on each of the classifiers:
 - kNN uses nearest neighbors in the algorithm. Hence, PCA dimensionality reduction increased the accuracy of kNN when using fairly small number of basis vectors (50).
 - Other classifiers were complicated enough for PCA to have effect on the accuracy.
+
+```
+./src/draw_boxplot2.sh
+```
 
 Here's the final boxplot using the best choice of the number of basis vectors for PCA dimentionality reduction for kNN and others using original data.
 !["Accuracy comparison boxplot"](./plots/boxplot_final.png)
