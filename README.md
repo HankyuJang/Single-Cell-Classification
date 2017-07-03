@@ -244,3 +244,7 @@ Here's the final boxplot using the best choice of the number of basis vectors fo
 ## For the future...
 
 With more different sets of parameters, there would be chance to find a model that best describes the dataset. 
+
+## Bibliography
+
+Retrieved dataset from [Cell types in the mouse cortex and hippocampus revealed by single-cell RNA-seq](http://science.sciencemag.org/content/early/2015/02/18/science.aaa1934.full)
